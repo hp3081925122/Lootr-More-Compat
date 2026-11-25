@@ -1,0 +1,12 @@
+{
+  "lootr_more_compat.container.twilight_boss": "%s Boss Loot Chest",
+  "lootr_more_compat.aether.unlocked_personal": "Unlocked your personal Lootr treasure!",
+  "lootr_more_compat.aquamirae.unlocked_personal": "Unlocked your personal Frozen Lootr chest!",
+  "lootr_more_compat.message.sneak_to_break": "This is a shared Lootr container. Sneak to break it.",
+  "lootr_more_compat.command.player_only": "This command can only be executed by a player.",
+  "lootr_more_compat.command.no_target": "Look directly at a block within 8 blocks.",
+  "lootr_more_compat.command.not_tracked": "Block at %s is not tracked by Lootr More Compat.",
+  "lootr_more_compat.command.info": "Lootr More Compat @ %s | type=%s | table=%s | openers=%s | openedByYou=%s",
+  "lootr_more_compat.command.reset_ok": "Reset Lootr More Compat container at %s for re-looting.",
+  "lootr_more_compat.command.list": "Tracked Lootr More Compat containers in %s: %s"
+}

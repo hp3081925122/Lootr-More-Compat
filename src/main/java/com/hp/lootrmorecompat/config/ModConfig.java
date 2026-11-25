@@ -1,0 +1,139 @@
+package com.hp.lootrmorecompat.config;
+
+import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.util.List;
+
+/**
+ * 模组通用与客户端配置文件定义（1.20.1 Forge，与 1.21.1 保持 1:1 配置对齐）。
+ */
+public final class ModConfig {
+    public static final ForgeConfigSpec COMMON_SPEC;
+    public static final Common COMMON;
+
+    public static final ForgeConfigSpec CLIENT_SPEC;
+    public static final Client CLIENT;
+
+    static {
+        ForgeConfigSpec.Builder commonBuilder = new ForgeConfigSpec.Builder();
+        COMMON = new Common(commonBuilder);
+        COMMON_SPEC = commonBuilder.build();
+
+        ForgeConfigSpec.Builder clientBuilder = new ForgeConfigSpec.Builder();
+        CLIENT = new Client(clientBuilder);
+        CLIENT_SPEC = clientBuilder.build();
+    }
+
+    private ModConfig() {
+    }
+
+    public static final class Common {
+        public final ForgeConfigSpec.BooleanValue enableAetherTreasureChest;
+        public final ForgeConfigSpec.BooleanValue aetherPerPlayerKeyUnlock;
+        public final ForgeConfigSpec.BooleanValue enableTwilightBossChest;
+        public final ForgeConfigSpec.BooleanValue twilightBossRerollPerPlayer;
+        public final ForgeConfigSpec.BooleanValue enableAquamiraeFrozenChest;
+        public final ForgeConfigSpec.BooleanValue aquamiraePerPlayerKeyUnlock;
+        public final ForgeConfigSpec.BooleanValue preserveIceAndFireGhostAmbush;
+        public final ForgeConfigSpec.BooleanValue enableBreakLootBlocks;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> customBreakLootBlocks;
+        public final ForgeConfigSpec.BooleanValue enableUniversalModdedContainers;
+        public final ForgeConfigSpec.BooleanValue protectCompatContainersFromBreak;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedMods;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBlocks;
+
+        public Common(ForgeConfigSpec.Builder builder) {
+            builder.comment("天境（The Aether）地牢 Boss 宝箱兼容设置").push("aether");
+            this.enableAetherTreasureChest = builder
+                    .comment("是否启用天境青铜/白银/黄金地牢宝箱的 Lootr 独立战利品兼容")
+                    .define("enableAetherTreasureChest", true);
+            this.aetherPerPlayerKeyUnlock = builder
+                    .comment("是否要求每位玩家各自消耗一把对应地牢钥匙才能解锁自己的独立战利品（false 表示一人解锁后所有玩家均可独立领取）")
+                    .define("aetherPerPlayerKeyUnlock", false);
+            builder.pop();
+
+            builder.comment("暮色森林（The Twilight Forest）Boss 战利品箱兼容设置").push("twilightforest");
+            this.enableTwilightBossChest = builder
+                    .comment("是否将暮色森林 Boss 死亡时生成的战利品箱转为每位玩家独立的 Lootr 战利品箱")
+                    .define("enableTwilightBossChest", true);
+            this.twilightBossRerollPerPlayer = builder
+                    .comment("是否为每位打开 Boss 战利品箱的玩家重新抽取一次该 Boss 的战利品表（false 表示向每位玩家复制一份击杀时的掉落物）")
+                    .define("twilightBossRerollPerPlayer", true);
+            builder.pop();
+
+            builder.comment("深海秘境（Aquamirae）冰冻宝箱兼容设置").push("aquamirae");
+            this.enableAquamiraeFrozenChest = builder
+                    .comment("是否启用 Aquamirae 冰冻宝箱（aquamirae:frozen_chest）的 Lootr 独立战利品兼容")
+                    .define("enableAquamiraeFrozenChest", true);
+            this.aquamiraePerPlayerKeyUnlock = builder
+                    .comment("是否要求每位玩家各自消耗一把冰冻钥匙解锁自己的独立战利品（false 表示一人解锁融冰后所有玩家均可独立领取）")
+                    .define("aquamiraePerPlayerKeyUnlock", false);
+            builder.pop();
+
+            builder.comment("冰火传说（Ice and Fire）幽灵宝箱设置").push("iceandfire");
+            this.preserveIceAndFireGhostAmbush = builder
+                    .comment("接管 iceandfire:ghost_chest 原地独立战利品时，是否在首次开启时保留原版幽灵伏击刷怪机制")
+                    .define("preserveIceAndFireGhostAmbush", true);
+            builder.pop();
+
+            builder.comment("破坏掉落型战利品方块兼容（如深幽暗域远古花瓶、Supplementaries 洞穴陶罐）").push("break_loot_blocks");
+            this.enableBreakLootBlocks = builder
+                    .comment("是否允许右键交互自然生成的破坏掉落型战利品方块以打开独立 Lootr 战利品（不破坏原方块）")
+                    .define("enableBreakLootBlocks", true);
+            this.customBreakLootBlocks = builder
+                    .comment("自定义破坏掉落型战利品方块列表，格式：方块ID|属性名=属性值|战利品表ID（属性条件可留空表示任意状态）")
+                    .defineListAllowEmpty(
+                            "customBreakLootBlocks",
+                            List.of(
+                                    "deeperdarker:ancient_vase|safe=false|deeperdarker:blocks/ancient_vase",
+                                    "supplementaries:urn|treasure=true|supplementaries:blocks/urn"
+                            ),
+                            obj -> obj instanceof String s && !s.isBlank()
+                    );
+            builder.pop();
+
+            builder.comment("通用第三方模组战利品容器原地兼容设置").push("universal");
+            this.enableUniversalModdedContainers = builder
+                    .comment("是否自动原地接管未被 Lootr 转换、但带有战利品表的第三方模组 RandomizableContainerBlockEntity（保留原方块模型与容量）")
+                    .define("enableUniversalModdedContainers", true);
+            this.protectCompatContainersFromBreak = builder
+                    .comment("是否对已接入独立战利品的兼容容器启用防误拆保护（需潜行挖掘才能破坏）")
+                    .define("protectCompatContainersFromBreak", true);
+            this.blacklistedMods = builder
+                    .comment("通用原地兼容忽略的模组命名空间列表")
+                    .defineListAllowEmpty(
+                            "blacklistedMods",
+                            List.of("minecraft", "lootr", "eternal_starlight"),
+                            obj -> obj instanceof String s && !s.isBlank()
+                    );
+            this.blacklistedBlocks = builder
+                    .comment("通用原地兼容忽略的特定方块 ID 列表（如玩家墓碑、宝箱怪、索财灵宝箱）")
+                    .defineListAllowEmpty(
+                            "blacklistedBlocks",
+                            List.of(
+                                    "twilightforest:keepsake_casket",
+                                    "aether:chest_mimic",
+                                    "cobblemon:gimmighoul_chest"
+                            ),
+                            obj -> obj instanceof String s && !s.isBlank()
+                    );
+            builder.pop();
+        }
+    }
+
+    public static final class Client {
+        public final ForgeConfigSpec.BooleanValue enableUnopenedParticles;
+        public final ForgeConfigSpec.IntValue particleIntervalTicks;
+
+        public Client(ForgeConfigSpec.Builder builder) {
+            builder.comment("客户端未领取战利品视觉提示设置").push("visuals");
+            this.enableUnopenedParticles = builder
+                    .comment("是否在当前玩家尚未领取的兼容战利品容器上方生成星光粒子提示")
+                    .define("enableUnopenedParticles", true);
+            this.particleIntervalTicks = builder
+                    .comment("客户端粒子提示刷新间隔（单位：tick，越大越省性能）")
+                    .defineInRange("particleIntervalTicks", 12, 4, 100);
+            builder.pop();
+        }
+    }
+}

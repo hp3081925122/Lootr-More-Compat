@@ -1,0 +1,12 @@
+{
+  "lootr_more_compat.container.twilight_boss": "%s 战利品箱",
+  "lootr_more_compat.aether.unlocked_personal": "已解锁你的个人 Lootr 地牢宝藏！",
+  "lootr_more_compat.aquamirae.unlocked_personal": "已解锁你的个人 Lootr 冰冻宝箱！",
+  "lootr_more_compat.message.sneak_to_break": "这是独立战利品兼容容器，请按住潜行键再破坏。",
+  "lootr_more_compat.command.player_only": "该指令仅限玩家执行。",
+  "lootr_more_compat.command.no_target": "请先对准 8 格以内的目标方块。",
+  "lootr_more_compat.command.not_tracked": "坐标 %s 处的方块未被 Lootr 更多兼容追踪。",
+  "lootr_more_compat.command.info": "Lootr 更多兼容 @ %s | 类型=%s | 战利品表=%s | 已领取人数=%s | 你已领取=%s",
+  "lootr_more_compat.command.reset_ok": "已重置坐标 %s 处兼容容器的所有玩家领取记录。",
+  "lootr_more_compat.command.list": "维度 %s 中已追踪的兼容容器数量：%s"
+}
