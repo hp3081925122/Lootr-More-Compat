@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "twilightforest:twilight_oak_trapped_chest", "required": false },
+    { "id": "twilightforest:canopy_trapped_chest", "required": false },
+    { "id": "twilightforest:mangrove_trapped_chest", "required": false },
+    { "id": "twilightforest:dark_trapped_chest", "required": false },
+    { "id": "twilightforest:time_trapped_chest", "required": false },
+    { "id": "twilightforest:transformation_trapped_chest", "required": false },
+    { "id": "twilightforest:mining_trapped_chest", "required": false },
+    { "id": "twilightforest:sorting_trapped_chest", "required": false },
+    { "id": "blue_skies:bluebright_trapped_chest", "required": false },
+    { "id": "blue_skies:starlit_trapped_chest", "required": false },
+    { "id": "blue_skies:frostbright_trapped_chest", "required": false },
+    { "id": "blue_skies:lunar_trapped_chest", "required": false },
+    { "id": "blue_skies:dusk_trapped_chest", "required": false },
+    { "id": "blue_skies:maple_trapped_chest", "required": false },
+    { "id": "blue_skies:cherry_trapped_chest", "required": false },
+    { "id": "blue_skies:comet_trapped_chest", "required": false },
+    { "id": "quark:nether_brick_trapped_chest", "required": false },
+    { "id": "quark:purpur_trapped_chest", "required": false },
+    { "id": "quark:prismarine_trapped_chest", "required": false }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.hp.lootrmorecompat.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.hp.lootrmorecompat.mixin.LmcMixinPlugin",
+  "mixins": [
+    "twilightforest.TFBossDepositMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
