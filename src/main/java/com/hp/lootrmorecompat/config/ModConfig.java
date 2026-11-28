@@ -34,6 +34,10 @@ public final class ModConfig {
         public final ModConfigSpec.BooleanValue twilightBossRerollPerPlayer;
         public final ModConfigSpec.BooleanValue enableAquamiraeFrozenChest;
         public final ModConfigSpec.BooleanValue aquamiraePerPlayerKeyUnlock;
+        public final ModConfigSpec.BooleanValue enableConfluenceChests;
+        public final ModConfigSpec.BooleanValue confluencePerPlayerKeyUnlock;
+        public final ModConfigSpec.BooleanValue preserveConfluenceDeathChestTrap;
+        public final ModConfigSpec.BooleanValue enableConfluenceLostPaper;
         public final ModConfigSpec.BooleanValue preserveIceAndFireGhostAmbush;
         public final ModConfigSpec.BooleanValue enableBreakLootBlocks;
         public final ModConfigSpec.ConfigValue<List<? extends String>> customBreakLootBlocks;
@@ -68,6 +72,21 @@ public final class ModConfig {
             this.aquamiraePerPlayerKeyUnlock = builder
                     .comment("是否要求每位玩家各自消耗一把冰冻钥匙解锁自己的独立战利品（false 表示一人解锁融冰后所有玩家均可独立领取）")
                     .define("aquamiraePerPlayerKeyUnlock", false);
+            builder.pop();
+
+            builder.comment("汇流来世（Confluence: Otherworld）宝箱与地牢遗落纸张兼容设置 / Confluence: Otherworld compat settings").push("confluence");
+            this.enableConfluenceChests = builder
+                    .comment("是否启用汇流来世全部主题箱、钥匙箱、9 大地牢群系箱、死人宝箱与树洞的 Lootr 独立战利品兼容 / Enable Lootr instanced loot compat for all Confluence chests and tree holes")
+                    .define("enableConfluenceChests", true);
+            this.confluencePerPlayerKeyUnlock = builder
+                    .comment("是否要求每位玩家各自使用对应钥匙解锁上锁的汇流宝箱（false 表示一人开锁后全员均可独立领取；暗影钥匙按原版机制始终不消耗） / Require each player to unlock locked Confluence chests with their own key (Shadow Key is never consumed)")
+                    .define("confluencePerPlayerKeyUnlock", false);
+            this.preserveConfluenceDeathChestTrap = builder
+                    .comment("首次开启汇流死人宝箱时，是否保留触发其连接的机械电路陷阱（飞镖/巨石/瞬爆 TNT） / Preserve mechanical trap activation on the first opening of a Confluence Death Chest")
+                    .define("preserveConfluenceDeathChestTrap", true);
+            this.enableConfluenceLostPaper = builder
+                    .comment("是否允许右键交互地牢自然生成的遗落纸张（confluence:lost_paper）以打开每人独立的战利品界面 / Enable per-player Lootr loot for naturally generated Confluence dungeon Lost Paper")
+                    .define("enableConfluenceLostPaper", true);
             builder.pop();
 
             builder.comment("冰火传说（Ice and Fire）幽灵宝箱设置").push("iceandfire");

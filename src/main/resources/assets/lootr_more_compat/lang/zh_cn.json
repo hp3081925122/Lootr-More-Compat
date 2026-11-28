@@ -2,6 +2,7 @@
   "lootr_more_compat.container.twilight_boss": "%s 战利品箱",
   "lootr_more_compat.aether.unlocked_personal": "已解锁你的个人 Lootr 地牢宝藏！",
   "lootr_more_compat.aquamirae.unlocked_personal": "已解锁你的个人 Lootr 冰冻宝箱！",
+  "lootr_more_compat.confluence.unlocked_personal": "已解锁你的个人 Lootr 汇流宝箱！",
   "lootr_more_compat.message.sneak_to_break": "这是独立战利品兼容容器，请按住潜行键再破坏。",
   "lootr_more_compat.command.player_only": "该指令仅限玩家执行。",
   "lootr_more_compat.command.no_target": "请先对准 8 格以内的目标方块。",

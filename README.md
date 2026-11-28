@@ -13,6 +13,7 @@
 - **The Aether — Treasure Chests**: Per-player instanced Lootr chests preserving Bronze, Silver, and Gold Dungeon Key unlocking, lid animations, and unlock sounds (supports both shared-unlock and per-player key-unlock modes).
 - **The Twilight Forest — All 8 Boss Chests**: Per-player instanced victory chests for Naga, Lich, Minoshroom, Hydra, Knight Phantoms, Ur-Ghast, Alpha Yeti, and Snow Queen, preserving original wood chests, sounds, particles, and fallback loot guarantee.
 - **Aquamirae — Frozen Chests**: Per-player instanced loot for Frozen Chests unlocked with Frozen Keys (shared-melt or per-player key unlock).
+- **Confluence: Otherworld — All 23 Chests, Tree Holes & Dungeon Lost Paper**: In-place per-player Lootr support for all 12 locked chests (Golden, Dungeon, Shadow with non-consumed Shadow Key, and all 9 Biome Chests with shared or per-player key unlock modes), both Death Chest traps (preserving mechanical trap activation, Wrench/Wire Cutter tool pass-through, and guaranteed per-player Dead Man's Sweater), all 9 unlocked themed chests, Tree Holes, and naturally generated Dungeon Lost Paper.
 - **Ice and Fire — Ghost Chests**: Per-player instanced loot for Ghost Chests with optional first-open Ghost ambush preservation.
 
 ### Break-to-Loot Blocks
@@ -46,6 +47,7 @@
 - **天境（The Aether）— 宝藏箱**：支持青铜、白银、黄金地牢宝藏箱玩家独立战利品，保留地牢钥匙解锁机制、开盖动画与音效，支持共享解锁与单人独立消耗钥匙模式。
 - **暮色森林（The Twilight Forest）— 全 8 大 Boss 战利品箱**：覆盖娜迦、巫妖、米诺菇、九头蛇、幻影骑士、暮初恶魂、雪怪首领与冰雪女王，保留原木宝箱外观、音效与粒子，并提供保底掉落。
 - **深海迷航（Aquamirae）— 冰冻宝箱**：支持冰冻钥匙开启的冰冻宝箱玩家独立战利品（可配置共享解冻或单人独立消耗钥匙）。
+- **汇流来世（Confluence: Otherworld）— 全部 23 种宝箱、树洞与地牢遗落纸张**：原地兼容全部 12 种上锁宝箱（金宝箱、地牢箱、暗影箱[暗影钥匙按原版不消耗]与 9 大地牢群系箱，支持共享解锁或每人独立钥匙解锁）、2 种死人宝箱陷阱（保留首次机械陷阱触发、扳手/钢丝钳拆线放行与每人必得死人毛衣）、9 种未上锁主题箱、树洞及地牢自然生成的遗落纸张。
 - **冰与火之歌（Ice and Fire）— 幽灵箱**：支持玩家独立战利品，并可配置保留首次开启时的幽灵伏击机制。
 
 ### 破坏掉落型容器兼容
