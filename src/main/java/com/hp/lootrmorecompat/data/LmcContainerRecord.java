@@ -23,6 +23,9 @@ public final class LmcContainerRecord {
     public static final String TYPE_AETHER_TREASURE = "aether_treasure";
     public static final String TYPE_TWILIGHT_BOSS = "twilight_boss";
     public static final String TYPE_AQUAMIRAE_FROZEN = "aquamirae_frozen";
+    public static final String TYPE_CONFLUENCE_CHEST = "confluence_chest";
+    public static final String TYPE_CONFLUENCE_DEATH_CHEST = "confluence_death_chest";
+    public static final String TYPE_CONFLUENCE_LOST_PAPER = "confluence_lost_paper";
     public static final String TYPE_BREAK_LOOT = "break_loot";
     public static final String TYPE_UNIVERSAL = "universal";
 

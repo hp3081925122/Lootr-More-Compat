@@ -7,6 +7,7 @@
   "plugin": "com.hp.lootrmorecompat.mixin.LmcMixinPlugin",
   "mixins": [
     "RandomizableContainerBlockEntityAccessor",
+    "lootr.LootrConfigManagerMixin",
     "twilightforest.TFBossRemoveMixin",
     "twilightforest.TFLootTablesMixin"
   ],

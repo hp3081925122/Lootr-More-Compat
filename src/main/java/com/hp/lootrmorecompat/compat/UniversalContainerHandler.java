@@ -44,7 +44,18 @@ public final class UniversalContainerHandler {
             return false;
         }
 
-        ResourceLocation blockId = ForgeRegistries.BLOCKS.getKey(blockEntity.getBlockState().getBlock());
+        // 防御性校验：跳过任意模组带有未解锁/锁定状态的方块，防止绕过原模组钥匙或机关锁
+        var blockState = blockEntity.getBlockState();
+        var unlockedProp = ConfluenceCompatHandler.findBooleanProperty(blockState, "unlocked");
+        if (unlockedProp != null && !blockState.getValue(unlockedProp)) {
+            return false;
+        }
+        var lockedProp = ConfluenceCompatHandler.findBooleanProperty(blockState, "locked");
+        if (lockedProp != null && blockState.getValue(lockedProp)) {
+            return false;
+        }
+
+        ResourceLocation blockId = ForgeRegistries.BLOCKS.getKey(blockState.getBlock());
         if (blockId == null) {
             return false;
         }

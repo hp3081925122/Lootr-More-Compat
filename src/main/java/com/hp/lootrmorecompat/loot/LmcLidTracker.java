@@ -1,5 +1,6 @@
 package com.hp.lootrmorecompat.loot;
 
+import com.hp.lootrmorecompat.compat.ConfluenceCompatHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -68,6 +69,21 @@ public final class LmcLidTracker {
     }
 
     private static void playSound(ServerLevel level, BlockPos pos, BlockState state, boolean open) {
+        if (ConfluenceCompatHandler.isLostPaper(state)) {
+            if (open) {
+                level.playSound(
+                        null,
+                        pos.getX() + 0.5,
+                        pos.getY() + 0.5,
+                        pos.getZ() + 0.5,
+                        SoundEvents.BOOK_PAGE_TURN,
+                        SoundSource.BLOCKS,
+                        0.7F,
+                        level.random.nextFloat() * 0.1F + 0.95F
+                );
+            }
+            return;
+        }
         boolean isBarrel = state.getBlock() instanceof BarrelBlock || state.hasProperty(BarrelBlock.OPEN);
         SoundEvent sound;
         if (isBarrel) {

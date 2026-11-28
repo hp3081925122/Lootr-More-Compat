@@ -3,6 +3,7 @@ package com.hp.lootrmorecompat.event;
 import com.hp.lootrmorecompat.compat.AetherCompatHandler;
 import com.hp.lootrmorecompat.compat.AquamiraeCompatHandler;
 import com.hp.lootrmorecompat.compat.BreakLootBlockHandler;
+import com.hp.lootrmorecompat.compat.ConfluenceCompatHandler;
 import com.hp.lootrmorecompat.compat.UniversalContainerHandler;
 import com.hp.lootrmorecompat.config.ModConfig;
 import com.hp.lootrmorecompat.data.LmcContainerRecord;
@@ -60,6 +61,15 @@ public final class CommonEvents {
         // 1.5 深海秘境冰冻宝箱专精处理
         if (AquamiraeCompatHandler.isFrozenChest(state)) {
             if (AquamiraeCompatHandler.handleRightClick(serverLevel, pos, player, event.getHand(), state)) {
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.CONSUME);
+            }
+            return;
+        }
+
+        // 1.6 汇流来世宝箱、树洞与地牢遗落纸张专精处理（保留钥匙锁、死人箱陷阱与扳手拆线语义）
+        if (ConfluenceCompatHandler.isConfluenceTarget(state, blockEntity)) {
+            if (ConfluenceCompatHandler.handleRightClick(serverLevel, pos, player, event.getHand(), state, blockEntity)) {
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.CONSUME);
             }

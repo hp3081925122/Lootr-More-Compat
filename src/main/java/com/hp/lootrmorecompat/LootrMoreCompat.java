@@ -47,7 +47,7 @@ public final class LootrMoreCompat {
 
     private static void logDetectedCompatMods() {
         String[] knownMods = {
-                "aether", "twilightforest", "aquamirae", "iceandfire",
+                "aether", "twilightforest", "aquamirae", "confluence", "iceandfire",
                 "deeperdarker", "supplementaries", "alexscaves", "undergarden",
                 "blue_skies", "ars_nouveau", "betterend", "betternether",
                 "quark", "cobblemon"

@@ -2,6 +2,7 @@
   "lootr_more_compat.container.twilight_boss": "%s Boss Loot Chest",
   "lootr_more_compat.aether.unlocked_personal": "Unlocked your personal Lootr treasure!",
   "lootr_more_compat.aquamirae.unlocked_personal": "Unlocked your personal Frozen Lootr chest!",
+  "lootr_more_compat.confluence.unlocked_personal": "Unlocked your personal Confluence Lootr chest!",
   "lootr_more_compat.message.sneak_to_break": "This is a shared Lootr container. Sneak to break it.",
   "lootr_more_compat.command.player_only": "This command can only be executed by a player.",
   "lootr_more_compat.command.no_target": "Look directly at a block within 8 blocks.",

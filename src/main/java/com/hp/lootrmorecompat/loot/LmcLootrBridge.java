@@ -23,7 +23,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -38,6 +41,7 @@ import noobanidus.mods.lootr.config.ConfigManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 统一的 Lootr 1.20.1 桥接器：负责创建独立战利品容器、按类型填充战利品表、打开菜单与同步已领取状态。
@@ -45,6 +49,10 @@ import java.util.List;
 public final class LmcLootrBridge {
     private static final ResourceLocation FALLBACK_TABLE_ID =
             new ResourceLocation(LootrMoreCompat.MOD_ID, "internal_fallback");
+    private static final ResourceLocation CONFLUENCE_DEAD_MANS_SEATER =
+            new ResourceLocation("confluence", "dead_mans_seater");
+    private static final ResourceLocation CONFLUENCE_DEAD_MANS_SWEATER =
+            new ResourceLocation("confluence", "dead_mans_sweater");
 
     private LmcLootrBridge() {
     }
@@ -81,7 +89,7 @@ public final class LmcLootrBridge {
             ModNetworking.syncSingleToPlayer(player, pos, true);
         }
 
-        Container wrapped = new LmcTrackingContainer(lootrInventory, level, pos.immutable());
+        Container wrapped = new LmcTrackingContainer(lootrInventory, level, pos.immutable(), record.getLootrId());
         int rows = Math.max(1, Math.min(6, record.getContainerSize() / 9));
         MenuProvider menuProvider = new MenuProvider() {
             @Override
@@ -116,9 +124,81 @@ public final class LmcLootrBridge {
                     fillTwilightBossLoot(level, pos, player, container, record);
             case LmcContainerRecord.TYPE_BREAK_LOOT -> (player, container, table, seed) ->
                     fillBreakLootBlock(level, pos, player, container, record);
+            case LmcContainerRecord.TYPE_CONFLUENCE_DEATH_CHEST -> (player, container, table, seed) ->
+                    fillConfluenceDeathChest(level, pos, player, container, record, seed);
+            case LmcContainerRecord.TYPE_CONFLUENCE_LOST_PAPER -> (player, container, table, seed) ->
+                    fillConfluenceLostPaper(level, pos, player, container, record);
             default -> (player, container, table, seed) ->
                     fillStandardChestLoot(level, pos, player, container, record, seed);
         };
+    }
+
+    private static void fillConfluenceDeathChest(
+            ServerLevel level,
+            BlockPos pos,
+            Player player,
+            Container container,
+            LmcContainerRecord record,
+            long seed
+    ) {
+        // 与汇流原版 DeathChestBlock.BEntity.unpackLootTable 保持一致：先放必掉死人毛衣，再解包战利品表
+        Item sweaterItem = ForgeRegistries.ITEMS.getValue(CONFLUENCE_DEAD_MANS_SEATER);
+        if (sweaterItem == null || sweaterItem == Items.AIR) {
+            sweaterItem = ForgeRegistries.ITEMS.getValue(CONFLUENCE_DEAD_MANS_SWEATER);
+        }
+        if (sweaterItem != null && sweaterItem != Items.AIR) {
+            for (int i = 0; i < container.getContainerSize(); i++) {
+                if (container.getItem(i).isEmpty()) {
+                    container.setItem(i, sweaterItem.getDefaultInstance());
+                    break;
+                }
+            }
+        }
+        fillStandardChestLoot(level, pos, player, container, record, seed);
+    }
+
+    private static void fillConfluenceLostPaper(
+            ServerLevel level,
+            BlockPos pos,
+            Player player,
+            Container container,
+            LmcContainerRecord record
+    ) {
+        if (record.getLootTable() != null) {
+            LootTable lootTable = level.getServer().getLootData().getLootTable(record.getLootTable());
+            if (lootTable != LootTable.EMPTY) {
+                int rolls = parsePositiveInt(record.getExtraMeta(), 1, 4);
+                LootParams.Builder builder = new LootParams.Builder(level)
+                        .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                        .withOptionalParameter(LootContextParams.THIS_ENTITY, player);
+                if (player instanceof ServerPlayer serverPlayer) {
+                    builder.withLuck(serverPlayer.getLuck());
+                }
+                LootParams params = builder.create(LootContextParamSets.GIFT);
+                List<ItemStack> rolled = new ArrayList<>();
+                for (int i = 0; i < rolls; i++) {
+                    rolled.addAll(lootTable.getRandomItems(params));
+                }
+                if (!rolled.isEmpty()) {
+                    scatterItems(container, rolled, level.getRandom());
+                    return;
+                }
+            }
+        }
+        if (record.hasFallbackItems()) {
+            fillFromFallback(container, record.getFallbackItems());
+        }
+    }
+
+    private static int parsePositiveInt(String raw, int fallback, int max) {
+        if (raw == null || raw.isBlank()) {
+            return fallback;
+        }
+        try {
+            return Math.max(1, Math.min(max, Integer.parseInt(raw.trim())));
+        } catch (NumberFormatException ignored) {
+            return fallback;
+        }
     }
 
     private static void fillStandardChestLoot(
@@ -259,11 +339,13 @@ public final class LmcLootrBridge {
         private final ILootrInventory delegate;
         private final ServerLevel level;
         private final BlockPos pos;
+        private final UUID lootrId;
 
-        private LmcTrackingContainer(ILootrInventory delegate, ServerLevel level, BlockPos pos) {
+        private LmcTrackingContainer(ILootrInventory delegate, ServerLevel level, BlockPos pos, UUID lootrId) {
             this.delegate = delegate;
             this.level = level;
             this.pos = pos;
+            this.lootrId = lootrId;
         }
 
         @Override
@@ -303,7 +385,22 @@ public final class LmcLootrBridge {
 
         @Override
         public boolean stillValid(Player player) {
-            return delegate.stillValid(player);
+            if (player.isRemoved() || !player.level().dimension().equals(level.dimension())) {
+                return false;
+            }
+            if (level.getBlockState(pos).isAir()) {
+                return false;
+            }
+            LmcContainerRecord current = LmcSavedData.get(level).getRecord(pos);
+            if (current == null || !current.getLootrId().equals(lootrId)) {
+                return false;
+            }
+            // 对无 BlockEntity 的破坏型战利品方块跳过 Lootr 的 BlockEntity 非空强制校验，改为距离校验
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be != null) {
+                return Container.stillValidBlockEntity(be, player);
+            }
+            return player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
         }
 
         @Override
@@ -313,13 +410,13 @@ public final class LmcLootrBridge {
 
         @Override
         public void startOpen(Player player) {
-            delegate.startOpen(player);
+            // 不转发给 delegate.startOpen，避免 Lootr 绕过本模组去触发底层方块的 ContainerOpenersCounter（如死人箱陷阱与双份开关音效）
             LmcLidTracker.onOpen(level, pos);
         }
 
         @Override
         public void stopOpen(Player player) {
-            delegate.stopOpen(player);
+            delegate.setChanged();
             LmcLidTracker.onClose(level, pos);
         }
     }
